@@ -102,18 +102,26 @@ section{
   to{transform:translateY(110vh)}
 }
 
-/* ===== MUSIC BUTTON ===== */
-#musicBtn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:rgba(0,0,0,.6);
-  padding:10px 16px;
-  border-radius:30px;
-  cursor:pointer;
-  z-index:999;
-  font-size:14px;
-}
+<!-- MUSIC -->
+<audio id="bgm" loop preload="auto">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div id="musicBtn">▶️ Bật nhạc</div>
+
+<script>
+const bgm = document.getElementById("bgm");
+const btn = document.getElementById("musicBtn");
+
+btn.addEventListener("click", () => {
+  bgm.muted = false;
+  bgm.play().then(() => {
+    btn.innerText = "🎶 Đang phát";
+  }).catch(err => {
+    alert("Chạm lại lần nữa để bật nhạc nha ❤️");
+  });
+});
+</script>
 </style>
 </head>
 
