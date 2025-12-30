@@ -2,33 +2,33 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Our Love 💖</title>
+<title>Love Timeline 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family: Arial, sans-serif;
-  background: radial-gradient(circle at top, #3a1c71, #000);
+  background:linear-gradient(180deg,#1b0036,#000);
   color:white;
+  font-family:Arial, sans-serif;
   overflow:hidden;
 }
 
-/* ===== TEXT ===== */
-.center{
+/* TEXT */
+.text{
   position:fixed;
   inset:0;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:30px;
   font-size:32px;
-  z-index:1;
+  padding:30px;
+  z-index:2;
 }
 
-/* ===== SLIDES ===== */
+/* SLIDE */
 .slide{
   position:fixed;
   inset:0;
@@ -36,8 +36,8 @@ body{
   align-items:center;
   justify-content:center;
   opacity:0;
-  transform:scale(1.2);
-  transition:all 1.8s ease;
+  transform:scale(1.15);
+  transition:all 1.6s ease;
 }
 
 .slide.active{
@@ -46,52 +46,49 @@ body{
 }
 
 .slide img{
-  width:90%;
+  width:88%;
   max-width:520px;
   border-radius:20px;
-  box-shadow:0 40px 90px rgba(255,255,255,.4);
+  box-shadow:0 30px 80px rgba(255,255,255,.4);
 }
 
-/* ===== HEART ===== */
+/* HEART */
 .heart{
   position:fixed;
-  width:14px;
-  height:14px;
+  width:12px;height:12px;
   background:pink;
   transform:rotate(45deg);
   animation:float 6s linear infinite;
 }
-
 .heart::before,.heart::after{
   content:"";
-  width:14px;height:14px;
+  width:12px;height:12px;
   background:pink;
   border-radius:50%;
   position:absolute;
 }
-
-.heart::before{top:-7px}
-.heart::after{left:-7px}
+.heart::before{top:-6px}
+.heart::after{left:-6px}
 
 @keyframes float{
   0%{bottom:-10%;opacity:0}
   20%{opacity:1}
-  100%{bottom:110%;opacity:0;transform:translateX(-40px) rotate(45deg)}
+  100%{bottom:110%;opacity:0;transform:translateX(-30px) rotate(45deg)}
 }
 
-/* ===== MUSIC BUTTON (RẤT RÕ) ===== */
+/* MUSIC BUTTON */
 #musicBtn{
   position:fixed;
-  bottom:30px;
+  bottom:25px;
   left:50%;
   transform:translateX(-50%);
+  padding:14px 28px;
+  font-size:18px;
   background:#ff4d6d;
   color:white;
-  padding:14px 26px;
   border-radius:40px;
-  font-size:18px;
   cursor:pointer;
-  z-index:9999;
+  z-index:999;
   box-shadow:0 10px 30px rgba(0,0,0,.5);
 }
 </style>
@@ -99,12 +96,10 @@ body{
 
 <body>
 
-<!-- TEXT START -->
-<div class="center" id="textStart">
+<div class="text" id="startText">
   Từ khoảnh khắc đầu tiên, mọi thứ bắt đầu.
 </div>
 
-<!-- SLIDES -->
 <div class="slide"><img src="1.jpg"></div>
 <div class="slide"><img src="2.jpg"></div>
 <div class="slide"><img src="3.jpg"></div>
@@ -116,12 +111,10 @@ body{
 <div class="slide"><img src="9.jpg"></div>
 <div class="slide"><img src="10.jpg"></div>
 
-<!-- TEXT END -->
-<div class="center" id="textEnd" style="display:none">
+<div class="text" id="endText" style="display:none">
   Anh mong rằng năm sau, chúng ta sẽ còn thật nhiều khoảnh khắc như thế này 💖
 </div>
 
-<!-- MUSIC -->
 <audio id="bgm" preload="auto" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
@@ -129,22 +122,46 @@ body{
 <div id="musicBtn">▶️ BẬT NHẠC</div>
 
 <script>
-/* ===== MUSIC ===== */
-const bgm = document.getElementById("bgm");
-const musicBtn = document.getElementById("musicBtn");
+/* MUSIC */
+const bgm=document.getElementById("bgm");
+const btn=document.getElementById("musicBtn");
 
-musicBtn.onclick = () => {
+btn.onclick=()=>{
   bgm.play().then(()=>{
-    musicBtn.innerText = "🎶 ĐANG PHÁT";
+    btn.innerText="🎶 ĐANG PHÁT";
   }).catch(()=>{
-    alert("Chạm lại lần nữa để bật nhạc nha ❤️");
+    alert("Bấm lại lần nữa để bật nhạc nha ❤️");
   });
 };
 
-/* ===== SLIDES ===== */
-const slides = document.querySelectorAll(".slide");
-let i = 0;
+/* SLIDES */
+const slides=document.querySelectorAll(".slide");
+let i=0;
 
 setTimeout(()=>{
-  document.getElementById("textStart").style.display="none";
-  slides[0].cl
+  document.getElementById("startText").style.display="none";
+  slides[0].classList.add("active");
+},2500);
+
+setInterval(()=>{
+  slides[i].classList.remove("active");
+  i++;
+  if(i<slides.length){
+    slides[i].classList.add("active");
+  }else{
+    document.getElementById("endText").style.display="flex";
+  }
+},3500);
+
+/* HEART */
+setInterval(()=>{
+  let h=document.createElement("div");
+  h.className="heart";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),7000);
+},500);
+</script>
+
+</body>
+</html>
