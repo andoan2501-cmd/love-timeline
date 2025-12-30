@@ -1,1 +1,204 @@
-# love-timeline
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Our Timeline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #0f0c29, #302b63, #24243e);
+  color: white;
+  overflow-x: hidden;
+}
+
+/* ===== OPENING ===== */
+.header {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+}
+
+/* ===== TIMELINE ===== */
+.timeline {
+  max-width: 900px;
+  margin: auto;
+}
+
+.photo {
+  margin: 80px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.photo img {
+  width: 90%;
+  max-width: 600px;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 1s ease;
+}
+
+.photo.show img {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ===== ENDING ===== */
+.footer {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 26px;
+  padding: 20px;
+}
+
+/* ===== HEART EFFECT ===== */
+.heart {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: pink;
+  transform: rotate(45deg);
+  animation: floatUp 6s linear infinite;
+  z-index: 1;
+}
+
+.heart::before,
+.heart::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: pink;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.heart::before {
+  top: -6px;
+  left: 0;
+}
+
+.heart::after {
+  left: -6px;
+  top: 0;
+}
+
+@keyframes floatUp {
+  0% { bottom: -10%; opacity: 0; }
+  20% { opacity: 1; }
+  100% {
+    bottom: 110%;
+    opacity: 0;
+    transform: translateX(-50px) rotate(45deg);
+  }
+}
+
+/* ===== FIREWORK CANVAS ===== */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- OPENING -->
+<div class="header">
+  <div>Từ khoảnh khắc đầu tiên, mọi thứ bắt đầu.</div>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline">
+  <div class="photo"><img src="timeline/1.jpg"></div>
+  <div class="photo"><img src="timeline/2.jpg"></div>
+  <div class="photo"><img src="timeline/3.jpg"></div>
+  <div class="photo"><img src="timeline/4.jpg"></div>
+  <div class="photo"><img src="timeline/5.jpg"></div>
+  <div class="photo"><img src="timeline/6.jpg"></div>
+  <div class="photo"><img src="timeline/7.jpg"></div>
+  <div class="photo"><img src="timeline/8.jpg"></div>
+  <div class="photo"><img src="timeline/9.jpg"></div>
+  <div class="photo"><img src="timeline/10.jpg"></div>
+</div>
+
+<!-- ENDING -->
+<div class="footer" id="end">
+  <div>Anh mong rằng năm sau, chúng ta sẽ còn thật nhiều khoảnh khắc như thế này.</div>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+// ===== SCROLL EFFECT =====
+const photos = document.querySelectorAll(".photo");
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+    }
+  });
+}, { threshold: 0.3 });
+
+photos.forEach(p => observer.observe(p));
+
+// ===== HEARTS =====
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = 4 + Math.random() * 3 + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 7000);
+}
+setInterval(createHeart, 600);
+
+// ===== FIREWORKS =====
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let fired = false;
+
+function firework() {
+  const x = Math.random() * canvas.width;
+  const y = Math.random() * canvas.height / 2;
+  for (let i = 0; i < 40; i++) {
+    ctx.beginPath();
+    ctx.arc(x, y, Math.random() * 2, 0, Math.PI * 2);
+    ctx.fillStyle = `hsl(${Math.random()*360},100%,60%)`;
+    ctx.fill();
+  }
+}
+
+window.addEventListener("scroll", () => {
+  const end = document.getElementById("end");
+  if (end.getBoundingClientRect().top < window.innerHeight && !fired) {
+    fired = true;
+    setInterval(firework, 500);
+  }
+});
+</script>
+
+</body>
+</html>
